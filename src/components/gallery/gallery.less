@@ -40,29 +40,44 @@ h3{
   perspective: 1800px;
   box-shadow: 5px 5px 16px -1px rgba(0,0,0,0.19);
   background: #fff;
-  cursor: pointer;
+  
   transform-style: preserve-3d;
   transform-origin: 0 50% 0;
-  transition: left .5s ease-in-out,
-              top .5s ease-in-out,
-              transform .5s ease-in-out;
+  //transition: left .5s ease-in-out,
+  //            top .5s ease-in-out,
+  //            transform .5s ease-in-out;
   img{
     width: 240px;
+    cursor: pointer;
   }
   figcaption{
     text-align: center;
   }
+  .desc {
+    color:#e64646;
+    
+    font-weight: bold;
+    font: -apple-system,BlinkMacSystemFont,'.SFNSDisplay-Regular','Hiragino Sans','ヒラギノ角ゴシック','ヒラギノ角ゴ ProN W3','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','游ゴシック体',YuGothic,'游ゴシック','Yu Gothic','メイリオ',Meiryo,Roboto,'Droid Sans',sans-serif
+  }
   .img-title{
+    cursor: pointer;
     color:#603501;
     margin: 5px 0 0 0;
   }
   .selected-tag {
+    cursor: pointer;
+    background: #600101;
     font-weight: bold;
-    color: #600101;
+    color: #fff;
   }
 }
 .img-figure.is-reverse{
-    transform: translate(320px) rotateY(180deg);
+  background-image: url("../../imgs/rin/back_bg.png");
+  background-color: #fff;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; 
+  transform: translate(320px) rotateY(180deg);
 }
 .front, .back {
     backface-visibility: hidden;
@@ -79,6 +94,9 @@ h3{
 }
 
 .back {
+  cursor: pointer;
+  top: 30%;
+  left: 20%;
   text-align: right;
   transform: rotateY(180deg);
 }

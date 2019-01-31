@@ -5,14 +5,6 @@ import Image from './image'
 import Controller from './controller'
 import './gallery.less'
 
-let ImgInfos = ImgsData.map((img)=>{
- return Object.assign({},
-    img,
-    {url: require(`src/imgs/${img.chara}/${img.filename}`)}
-  )
-})
-
-
 let getRandom = (min,max) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
@@ -203,7 +195,7 @@ class Gallery extends Component{
   render(){
     let navigators = []
     let imgFigures = []
-    ImgInfos.forEach(function(imgInfo,index){
+    ImgsData.forEach(function(ImgsData,index){
       if(!this.state.figureArrangeArr[index]){
         this.state.figureArrangeArr[index] = {
           pos: {
@@ -218,7 +210,7 @@ class Gallery extends Component{
       let shouldPush = false;
       if (this.state.selectedTag.length > 0) {
         for (let i = 0; i < this.state.selectedTag.length; i++){
-          if (imgInfo.tags.indexOf(this.state.selectedTag[i]) >= 0) {
+          if (ImgsData.tags.indexOf(this.state.selectedTag[i]) >= 0) {
             shouldPush = true;
           }
         }
@@ -226,7 +218,7 @@ class Gallery extends Component{
         shouldPush = true;
       }
       if (shouldPush) {
-        imgFigures.push(<Image data={imgInfo} selectedTags={this.state.selectedTag} key={index} id={"figure"+index}
+        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
                         center={this.putFigureCenter(index)}

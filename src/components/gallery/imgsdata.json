@@ -1,7 +1,7 @@
 [
     {
-        "filename": "IMG_1625.jpg",
-        "chara": "rin",
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1625.jpg",
+        "chara": ["rin"],
         "tags": ["black full zipper jacket"],
         "anime": "Free!",
         "season": 1,
@@ -9,12 +9,21 @@
         "episode": 5
     },
     {
-        "filename": "IMG_1601.jpg",
-        "chara": "rin",
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1601.jpg",
+        "chara": ["rin"],
         "tags": ["black tracksuit"],
         "anime": "Free!",
         "season": 1,
         "year": 2013,
-        "episode": 5
+        "episode": 4
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/Free!_3rd_Season_EP10_endcard.jpg",
+        "chara": ["rin", "sosuke"],
+        "tags": ["black cap"],
+        "season": 3,
+        "anime": "Free! -Dive to the future-",
+        "year": 2018,
+        "episode": 10
     }
 ]
