@@ -1,0 +1,113 @@
+html{
+  height: 100%;
+}
+body{
+  margin: 0;
+  padding: 0;
+  background: #333;
+  width: 100%;
+  height: 100%;
+}
+h3{
+  margin: 0;
+  padding: 0;
+}
+#root{
+  height: 100%;
+}
+.stage{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ccc;
+}
+.img-container{
+  font: 400 12px "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:url("../../imgs/bg_pc.jpg") repeat-y top center scroll;
+  overflow: hidden;
+}
+.img-figure{
+  position: absolute;
+  width: 280px;
+  height: 200px;
+  margin: 0;
+  padding: 20px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  perspective: 1800px;
+  box-shadow: 5px 5px 16px -1px rgba(0,0,0,0.19);
+  background: #fff;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform-origin: 0 50% 0;
+  transition: left .5s ease-in-out,
+              top .5s ease-in-out,
+              transform .5s ease-in-out;
+  img{
+    width: 240px;
+  }
+  figcaption{
+    text-align: center;
+  }
+  .img-title{
+    color:#603501;
+    margin: 5px 0 0 0;
+  }
+  .selected-tag {
+    font-weight: bold;
+    color: #600101;
+  }
+}
+.img-figure.is-reverse{
+    transform: translate(320px) rotateY(180deg);
+}
+.front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+
+.front {
+  text-align: center;
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.back {
+  text-align: right;
+  transform: rotateY(180deg);
+}
+.img-nav{
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  text-align: center;
+  z-index: 100;
+  width: 100%;
+  .controller{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    //background: #999;
+    background-image: url("../../imgs/rin/sharklogo.png");
+    border-radius: 50%;
+    transform: scale(.3);
+    transition: transform .6s ease-in-out,background-color .3s ;
+    vertical-align: middle;
+    cursor: pointer;
+    &.is-center{
+      transform: scale(.4);
+      &.is-reverse{
+        background-color: #555;
+        transform: rotateY(180deg) scale(.4);
+      }
+    }
+
+  }
+}
+
