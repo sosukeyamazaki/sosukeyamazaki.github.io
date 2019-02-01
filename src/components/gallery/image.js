@@ -1,6 +1,12 @@
 import React,{Component} from 'react'
 
 class Image extends Component{
+  constructor() {
+    super();
+    this.state = {
+      showExpand: false
+    };
+  }
   handleClick(e){
     if(this.props.arrange.isCenter){
       this.props.reverse()
@@ -38,7 +44,8 @@ class Image extends Component{
       style={styleObj}>
 
         <div className="front">
-          <img src={this.props.data.url} alt={this.props.data.tags} onClick={this.handleClick.bind(this)}/>
+          <img className="pic" src={this.props.data.url} alt={this.props.data.tags} onClick={this.handleClick.bind(this)}/>
+          <img className='expand' src='http://icons.iconarchive.com/icons/icons8/ios7/16/Editing-Expand-icon.png' onClick={() => this.props.expand(this.props.id).bind(this)}/>
           {allTitles}
         </div>
         <div className="back" onClick={this.handleClick.bind(this)}>

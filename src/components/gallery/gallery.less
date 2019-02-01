@@ -49,13 +49,35 @@ h3{
   //transition: left .5s ease-in-out,
   //            top .5s ease-in-out,
   //            transform .5s ease-in-out;
-  img{
+  .pic{
     width: 100%;
     height: auto;
     cursor: pointer;
     overflow: auto;
     display: table-row;
     //float: left;
+  }
+  .pic .target {
+    width: 500px;
+    height: auto;
+  }
+  .close {
+    background-image: url(https://bit.ly/29QeT21);
+    background-repeat: no-repeat;
+    bottom: 418px;
+    display: none;
+    height: 32px;
+    left: 462px;
+    margin-top: -32px;
+    position: relative;
+    width: 32px;
+  }
+  .expand{
+    top: 2px;
+    right: 2px;
+    pointer-events: none;
+    position: absolute;
+    display: block;
   }
   figcaption{
     text-align: center;

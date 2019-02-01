@@ -12,7 +12,18 @@ let getRandom = (min,max) => {
 let getRandomDeg = () => {
   return ((Math.random() > 0.5 ? '' : '-') + Math.ceil(Math.random() * 30))
 }
-
+class Popup extends React.Component {
+  render() {
+    return (
+      <div className='popup'>
+        <div className='popup_inner'>
+          <h1>{this.props.text}</h1>
+        <button onClick={this.props.closePopup}>close me</button>
+        </div>
+      </div>
+    );
+  }
+}
 
 /**
  * 整个 stage 分为左分区、右分区、上分区以及中间展示的 figure
@@ -55,7 +66,8 @@ class Gallery extends Component{
         }
         */
       ],
-      selectedTag:[]
+      selectedTag:[],
+      expand: -1
     };
   }
   /**
@@ -83,7 +95,11 @@ class Gallery extends Component{
       })
     }.bind(this)
   }
-
+  expandFigure(index) {
+    this.setState({
+      expand: index
+    });
+  }
   reArrangFigure(centerIndex){
     let constantPos = this.constantPos,
         centerPos = constantPos.centerPos,
@@ -217,11 +233,12 @@ class Gallery extends Component{
         shouldPush = true;
       }
       if (shouldPush) {
-        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index}
+        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index} figid={index}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
                         center={this.putFigureCenter(index)}
-                        settag={this.setTag.bind(this)}/>)
+                        settag={this.setTag.bind(this)}
+                        expand={this.expandFigure.bind(this)}/>)
         navigators.push(<Controller key={index}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
@@ -238,6 +255,13 @@ class Gallery extends Component{
         <nav className="img-nav">
           {navigators}
         </nav>
+        {this.state.expand !== -1 ?
+          <Popup
+            text='Close Me'
+            closePopup={() => this.expandFigure(-1).bind(this)}
+          />
+          : null
+        }
       </div>
     )
   }
