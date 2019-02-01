@@ -16,10 +16,8 @@ class Popup extends React.Component {
   render() {
     return (
       <div className='popup'>
-        <div className='popup_inner'>
-          <h1>{this.props.text}</h1>
-        <button onClick={this.props.closePopup}>close me</button>
-        </div>
+        <img className='close' src='http://icons.iconarchive.com/icons/iconsmind/outline/32/Close-icon.png' onClick={() => this.props.close(-1)}/>
+        <img src={this.props.pic.url} />
       </div>
     );
   }
@@ -258,8 +256,8 @@ class Gallery extends Component{
         {this.state.expand !== -1 ?
           <Popup
             text='Close Me'
-            closePopup={() => this.expandFigure(-1).bind(this)}
-          />
+            closePopup={() => this.expandFigure(-1).bind(this)} pic={ImgsData[this.state.expand]} close={this.expandFigure.bind(this)}/>
+          
           : null
         }
       </div>

@@ -45,7 +45,7 @@ class Image extends Component{
 
         <div className="front">
           <img className="pic" src={this.props.data.url} alt={this.props.data.tags} onClick={this.handleClick.bind(this)}/>
-          <img className='expand' src='http://icons.iconarchive.com/icons/icons8/ios7/16/Editing-Expand-icon.png' onClick={() => this.props.expand(this.props.id).bind(this)}/>
+          <img className='expand' src='http://icons.iconarchive.com/icons/icons8/ios7/16/Editing-Expand-icon.png' onClick={() => this.props.expand(this.props.figid)}/>
           {allTitles}
         </div>
         <div className="back" onClick={this.handleClick.bind(this)}>

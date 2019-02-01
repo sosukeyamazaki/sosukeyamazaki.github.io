@@ -21,6 +21,22 @@ h3{
   height: 100%;
   background: #ccc;
 }
+.popup{
+  top:30%;
+  left:30%;
+  position: fixed;
+  max-width: 500px;
+  height: auto;
+  z-index: 15;
+  img {
+    width: 100%;
+  }
+  .close {
+    float: right;
+    margin-bottom: 5px;
+    width: 20px;
+  }
+}
 .img-container{
   font: 400 12px "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
   position: relative;
@@ -61,23 +77,13 @@ h3{
     width: 500px;
     height: auto;
   }
-  .close {
-    background-image: url(https://bit.ly/29QeT21);
-    background-repeat: no-repeat;
-    bottom: 418px;
-    display: none;
-    height: 32px;
-    left: 462px;
-    margin-top: -32px;
-    position: relative;
-    width: 32px;
-  }
+  
   .expand{
     top: 2px;
     right: 2px;
-    pointer-events: none;
     position: absolute;
     display: block;
+    cursor: pointer;
   }
   figcaption{
     text-align: center;

@@ -22233,11 +22233,40 @@ var getRandomDeg = function getRandomDeg() {
   return (Math.random() > 0.5 ? '' : '-') + Math.ceil(Math.random() * 30);
 };
 
+var Popup = function (_React$Component) {
+  _inherits(Popup, _React$Component);
+
+  function Popup() {
+    _classCallCheck(this, Popup);
+
+    return _possibleConstructorReturn(this, (Popup.__proto__ || Object.getPrototypeOf(Popup)).apply(this, arguments));
+  }
+
+  _createClass(Popup, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'popup' },
+        _react2.default.createElement('img', { className: 'close', src: '../../imgs/Close-icon.png', onClick: function onClick() {
+            return _this2.props.close(-1);
+          } }),
+        _react2.default.createElement('img', { src: this.props.pic.url })
+      );
+    }
+  }]);
+
+  return Popup;
+}(_react2.default.Component);
+
 /**
  * 整个 stage 分为左分区、右分区、上分区以及中间展示的 figure
  * 左右分区的 y 方向取值范围相同，因此设置不同的水平方向取值返回
  * 上分区另设自己的取值范围
  */
+
 
 var Gallery = function (_Component) {
   _inherits(Gallery, _Component);
@@ -22245,9 +22274,9 @@ var Gallery = function (_Component) {
   function Gallery(props) {
     _classCallCheck(this, Gallery);
 
-    var _this = _possibleConstructorReturn(this, (Gallery.__proto__ || Object.getPrototypeOf(Gallery)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (Gallery.__proto__ || Object.getPrototypeOf(Gallery)).call(this, props));
 
-    _this.constantPos = {
+    _this3.constantPos = {
       //中间展示 figure
       centerPos: {
         left: 0,
@@ -22265,7 +22294,7 @@ var Gallery = function (_Component) {
         topSectionY: [0, 0]
       }
     };
-    _this.state = {
+    _this3.state = {
       //  存储每个 figure 的位置
       figureArrangeArr: [
         /*
@@ -22280,9 +22309,10 @@ var Gallery = function (_Component) {
         }
         */
       ],
-      selectedTag: []
+      selectedTag: [],
+      expand: -1
     };
-    return _this;
+    return _this3;
   }
   /**
    * 图片居中
@@ -22298,7 +22328,6 @@ var Gallery = function (_Component) {
         this.reArrangFigure(index);
       }.bind(this);
     }
-
     /**
      * 翻转图片
      * @param  index 需要翻转图片的 index 值
@@ -22316,6 +22345,13 @@ var Gallery = function (_Component) {
           figureArrangeArr: figureArrangeArr
         });
       }.bind(this);
+    }
+  }, {
+    key: 'expandFigure',
+    value: function expandFigure(index) {
+      this.setState({
+        expand: index
+      });
     }
   }, {
     key: 'reArrangFigure',
@@ -22434,6 +22470,8 @@ var Gallery = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
       var navigators = [];
       var imgFigures = [];
       _imgsdata2.default.forEach(function (ImgsData, index) {
@@ -22459,15 +22497,18 @@ var Gallery = function (_Component) {
           shouldPush = true;
         }
         if (shouldPush) {
-          imgFigures.push(_react2.default.createElement(_image2.default, { data: ImgsData, selectedTags: this.state.selectedTag, key: index, id: "figure" + index,
+          imgFigures.push(_react2.default.createElement(_image2.default, { data: ImgsData, selectedTags: this.state.selectedTag, key: index, id: "figure" + index, figid: index,
             arrange: this.state.figureArrangeArr[index],
             reverse: this.reverseFigure(index),
             center: this.putFigureCenter(index),
-            settag: this.setTag.bind(this) }));
+            settag: this.setTag.bind(this),
+            expand: this.expandFigure.bind(this) }));
           navigators.push(_react2.default.createElement(_controller2.default, { key: index,
             arrange: this.state.figureArrangeArr[index],
             reverse: this.reverseFigure(index),
-            center: this.putFigureCenter(index) }));
+            center: this.putFigureCenter(index)
+
+          }));
         }
       }.bind(this));
       return _react2.default.createElement(
@@ -22482,7 +22523,12 @@ var Gallery = function (_Component) {
           'nav',
           { className: 'img-nav' },
           navigators
-        )
+        ),
+        this.state.expand !== -1 ? _react2.default.createElement(Popup, {
+          text: 'Close Me',
+          closePopup: function closePopup() {
+            return _this4.expandFigure(-1).bind(_this4);
+          }, pic: _imgsdata2.default[this.state.expand], close: this.expandFigure.bind(this) }) : null
       );
     }
   }]);
@@ -22496,7 +22542,7 @@ exports.default = Gallery;
 /* 185 */
 /***/ (function(module, exports) {
 
-module.exports = [{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1625.jpg","chara":["rin"],"tags":["black full zipper jacket"],"anime":"Free!","season":1,"year":2013,"episode":5},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1601.jpg","chara":["rin"],"tags":["black tracksuit"],"anime":"Free!","season":1,"year":2013,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/Free!_3rd_Season_EP10_endcard.jpg","chara":["rin","sosuke"],"tags":["black cap"],"season":3,"anime":"Free! -Dive to the future-","year":2018,"episode":10}]
+module.exports = [{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1625.jpg","chara":["rin"],"tags":["black full zipper jacket"],"anime":"Free!","season":1,"year":2013,"episode":5},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1601.jpg","chara":["rin"],"tags":["black tracksuit"],"anime":"Free!","season":1,"year":2013,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/Free!_3rd_Season_EP10_endcard.jpg","chara":["rin","sosuke"],"tags":["black cap"],"season":3,"anime":"Free! -Dive to the future-","year":2018,"episode":10},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0119.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0120.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1629.PNG","chara":["rin"],"tags":["grey hoodie"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1630.PNG","chara":["rin"],"tags":["watch"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1631.PNG","chara":["rin"],"tags":["blue full zipper hoodie"],"season":2,"episode":2}]
 
 /***/ }),
 /* 186 */
@@ -22529,7 +22575,12 @@ var Image = function (_Component) {
   function Image() {
     _classCallCheck(this, Image);
 
-    return _possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).call(this));
+
+    _this.state = {
+      showExpand: false
+    };
+    return _this;
   }
 
   _createClass(Image, [{
@@ -22587,7 +22638,10 @@ var Image = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'front' },
-          _react2.default.createElement('img', { src: this.props.data.url, alt: this.props.data.tags, onClick: this.handleClick.bind(this) }),
+          _react2.default.createElement('img', { className: 'pic', src: this.props.data.url, alt: this.props.data.tags, onClick: this.handleClick.bind(this) }),
+          _react2.default.createElement('img', { className: 'expand', src: 'http://icons.iconarchive.com/icons/icons8/ios7/16/Editing-Expand-icon.png', onClick: function onClick() {
+              return _this2.props.expand(_this2.props.figid);
+            } }),
           allTitles
         ),
         _react2.default.createElement(
@@ -22715,7 +22769,7 @@ exports = module.exports = __webpack_require__(191)(false);
 
 
 // module
-exports.push([module.i, "html {\n  height: 100%;\n}\nbody {\n  margin: 0;\n  padding: 0;\n  background: #333;\n  width: 100%;\n  height: 100%;\n}\nh3 {\n  margin: 0;\n  padding: 0;\n}\n#root {\n  height: 100%;\n}\n.stage {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: #ccc;\n}\n.img-container {\n  font: 400 12px \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, Osaka, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\", sans-serif;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: url(" + escape(__webpack_require__(192)) + ") repeat-y top center scroll;\n  overflow: hidden;\n}\n.img-figure {\n  position: absolute;\n  width: 280px;\n  height: 200px;\n  margin: 0;\n  padding: 20px;\n  border-radius: 3px;\n  box-sizing: border-box;\n  perspective: 1800px;\n  box-shadow: 5px 5px 16px -1px rgba(0, 0, 0, 0.19);\n  background: #fff;\n  transform-style: preserve-3d;\n  transform-origin: 0 50% 0;\n}\n.img-figure img {\n  width: 240px;\n  cursor: pointer;\n}\n.img-figure figcaption {\n  text-align: center;\n}\n.img-figure .desc {\n  color: #e64646;\n  font-weight: bold;\n  font: -apple-system, BlinkMacSystemFont, '.SFNSDisplay-Regular', 'Hiragino Sans', '\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4\\30B7\\30C3\\30AF', '\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   ProN W3', 'Hiragino Kaku Gothic ProN', '\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3', 'Hiragino Kaku Gothic Pro', '\\6E38\\30B4\\30B7\\30C3\\30AF\\4F53', YuGothic, '\\6E38\\30B4\\30B7\\30C3\\30AF', 'Yu Gothic', '\\30E1\\30A4\\30EA\\30AA', Meiryo, Roboto, 'Droid Sans', sans-serif;\n}\n.img-figure .img-title {\n  cursor: pointer;\n  color: #603501;\n  margin: 5px 0 0 0;\n}\n.img-figure .selected-tag {\n  cursor: pointer;\n  background: #600101;\n  font-weight: bold;\n  color: #fff;\n}\n.img-figure.is-reverse {\n  background-image: url(" + escape(__webpack_require__(193)) + ");\n  background-color: #fff;\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: center;\n  transform: translate(320px) rotateY(180deg);\n}\n.front,\n.back {\n  backface-visibility: hidden;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 20px;\n}\n.front {\n  text-align: center;\n  z-index: 2;\n  transform: rotateY(0deg);\n}\n.back {\n  cursor: pointer;\n  top: 30%;\n  left: 20%;\n  text-align: right;\n  transform: rotateY(180deg);\n}\n.img-nav {\n  position: absolute;\n  left: 0;\n  bottom: 30px;\n  text-align: center;\n  z-index: 100;\n  width: 100%;\n}\n.img-nav .controller {\n  display: inline-block;\n  width: 100px;\n  height: 100px;\n  background-image: url(" + escape(__webpack_require__(194)) + ");\n  border-radius: 50%;\n  transform: scale(0.3);\n  transition: transform 0.6s ease-in-out, background-color 0.3s;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.img-nav .controller.is-center {\n  transform: scale(0.4);\n}\n.img-nav .controller.is-center.is-reverse {\n  background-color: #555;\n  transform: rotateY(180deg) scale(0.4);\n}\n", ""]);
+exports.push([module.i, "html {\n  height: 100%;\n}\nbody {\n  margin: 0;\n  padding: 0;\n  background: #333;\n  width: 100%;\n  height: 100%;\n}\nh3 {\n  margin: 0;\n  padding: 0;\n}\n#root {\n  height: 100%;\n}\n.stage {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: #ccc;\n}\n.popup {\n  top: 30%;\n  left: 30%;\n  position: fixed;\n  max-width: 500px;\n  height: auto;\n  z-index: 15;\n}\n.popup img {\n  width: 100%;\n}\n.popup .close {\n  float: right;\n  margin-bottom: 5px;\n  width: 20px;\n}\n.img-container {\n  font: 400 12px \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, Osaka, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\", sans-serif;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: url(" + escape(__webpack_require__(192)) + ") repeat-y top center scroll;\n  overflow: hidden;\n}\n.img-figure {\n  position: absolute;\n  width: 280px;\n  height: auto;\n  margin: 0;\n  padding: 20px;\n  border-radius: 3px;\n  box-sizing: border-box;\n  perspective: 1800px;\n  box-shadow: 5px 5px 16px -1px rgba(0, 0, 0, 0.19);\n  background: #fff;\n  overflow: visible;\n  display: table;\n  transform-style: preserve-3d;\n  transform-origin: 0 50% 0;\n}\n.img-figure .pic {\n  width: 100%;\n  height: auto;\n  cursor: pointer;\n  overflow: auto;\n  display: table-row;\n}\n.img-figure .pic .target {\n  width: 500px;\n  height: auto;\n}\n.img-figure .expand {\n  top: 2px;\n  right: 2px;\n  position: absolute;\n  display: block;\n  cursor: pointer;\n}\n.img-figure figcaption {\n  text-align: center;\n}\n.img-figure .img-title {\n  cursor: pointer;\n  color: #603501;\n  display: table-row;\n}\n.img-figure .selected-tag {\n  cursor: pointer;\n  background: #600101;\n  font-weight: bold;\n  color: #fff;\n}\n/*\n.img-figure::before, .img-figure::after {\n  content:\"\";\n  display:table-row;\n}\n.img-figure::after {\n  content: \".\";\n  display: table-row;\n  height: 0;\n  clear: both;\n  overflow: auto;\n  visibility: hidden;\n}*/\n.img-figure.is-reverse {\n  background-image: url(" + escape(__webpack_require__(193)) + ");\n  background-color: #fff;\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: center;\n  transform: translate(320px) rotateY(180deg);\n}\n/*\n.front, .back {\n  backface-visibility: hidden;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 20px;\n}\n*/\n.img-figure .front {\n  backface-visibility: hidden;\n  display: table-row;\n  text-align: center;\n  z-index: 2;\n  transform: rotateY(0deg);\n}\n.img-figure .back {\n  cursor: pointer;\n  top: 30%;\n  left: 30%;\n  text-align: right;\n  float: left;\n  display: block;\n  position: absolute;\n  transform: rotateY(180deg);\n}\n.img-figure .back .desc {\n  color: #e64646;\n  font-weight: bold;\n}\n.img-nav {\n  position: absolute;\n  left: 0;\n  bottom: 30px;\n  text-align: center;\n  z-index: 100;\n  width: 100%;\n}\n.img-nav .controller {\n  display: inline-block;\n  width: 100px;\n  height: 100px;\n  background-image: url(" + escape(__webpack_require__(194)) + ");\n  border-radius: 50%;\n  transform: scale(0.3);\n  transition: transform 0.6s ease-in-out, background-color 0.3s;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.img-nav .controller.is-center {\n  transform: scale(0.4);\n}\n.img-nav .controller.is-center.is-reverse {\n  background-color: #555;\n  transform: rotateY(180deg) scale(0.4);\n}\n", ""]);
 
 // exports
 
