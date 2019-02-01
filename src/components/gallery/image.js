@@ -36,6 +36,7 @@ class Image extends Component{
     return(
       <figure className={figureClassName} id={this.props.id}
       style={styleObj}>
+
         <div className="front">
           <img src={this.props.data.url} alt={this.props.data.tags} onClick={this.handleClick.bind(this)}/>
           {allTitles}
@@ -44,6 +45,7 @@ class Image extends Component{
           {this.props.data.season ? (<div className="desc">Season {this.props.data.season}</div>):''}
           {this.props.data.episode ? (<div className="desc">Episode {this.props.data.episode}</div>):''}
         </div>
+
       </figure>
     )
   }

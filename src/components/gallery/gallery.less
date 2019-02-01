@@ -32,7 +32,9 @@ h3{
 .img-figure{
   position: absolute;
   width: 280px;
-  height: 200px;
+  //min-height: 200px;
+  height: auto;
+  //float: left;
   margin: 0;
   padding: 20px;
   border-radius: 3px;
@@ -40,29 +42,30 @@ h3{
   perspective: 1800px;
   box-shadow: 5px 5px 16px -1px rgba(0,0,0,0.19);
   background: #fff;
-  
+  overflow: visible;
+  display:table;
   transform-style: preserve-3d;
   transform-origin: 0 50% 0;
   //transition: left .5s ease-in-out,
   //            top .5s ease-in-out,
   //            transform .5s ease-in-out;
   img{
-    width: 240px;
+    width: 100%;
+    height: auto;
     cursor: pointer;
+    overflow: auto;
+    display: table-row;
+    //float: left;
   }
   figcaption{
     text-align: center;
   }
-  .desc {
-    color:#e64646;
-    
-    font-weight: bold;
-    font: -apple-system,BlinkMacSystemFont,'.SFNSDisplay-Regular','Hiragino Sans','ヒラギノ角ゴシック','ヒラギノ角ゴ ProN W3','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','游ゴシック体',YuGothic,'游ゴシック','Yu Gothic','メイリオ',Meiryo,Roboto,'Droid Sans',sans-serif
-  }
+
   .img-title{
     cursor: pointer;
     color:#603501;
-    margin: 5px 0 0 0;
+    display: table-row;
+
   }
   .selected-tag {
     cursor: pointer;
@@ -71,34 +74,58 @@ h3{
     color: #fff;
   }
 }
+/*
+.img-figure::before, .img-figure::after {
+  content:"";
+  display:table-row;
+}
+.img-figure::after {
+  content: ".";
+  display: table-row;
+  height: 0;
+  clear: both;
+  overflow: auto;
+  visibility: hidden;
+}*/
 .img-figure.is-reverse{
   background-image: url("../../imgs/rin/back_bg.png");
   background-color: #fff;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center; 
+  background-position: center;
+
   transform: translate(320px) rotateY(180deg);
 }
+/*
 .front, .back {
-    backface-visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 20px;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
 }
-
-.front {
+*/
+.img-figure .front {
+  backface-visibility: hidden;
+  display: table-row;
   text-align: center;
   z-index: 2;
   transform: rotateY(0deg);
 }
 
-.back {
+.img-figure .back {
   cursor: pointer;
   top: 30%;
-  left: 20%;
+  left: 30%;
   text-align: right;
+  float: left;
+  display: block;
+  position: absolute;
   transform: rotateY(180deg);
+  .desc {
+    color:#e64646;
+    font-weight: bold;
+  }
 }
 .img-nav{
   position: absolute;

@@ -63,12 +63,11 @@ class Gallery extends Component{
    * @param 需要居中图片的 index 值
    * @return 返回一个待执行函数
    */
-    putFigureCenter(index){
-      return function(){
-      this.reArrangFigure(index)
-      }.bind(this)
-    }
-
+  putFigureCenter(index){
+    return function(){
+    this.reArrangFigure(index)
+    }.bind(this)
+  }
   /**
    * 翻转图片
    * @param  index 需要翻转图片的 index 值
@@ -226,12 +225,14 @@ class Gallery extends Component{
         navigators.push(<Controller key={index}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
-                        center={this.putFigureCenter(index)}/>)
+                        center={this.putFigureCenter(index)}
+
+                        />)
       }
   }.bind(this))
     return(
       <div className="stage" id="stage">
-        <div className="img-container">
+        <div className="img-container" >
           {imgFigures}
         </div>
         <nav className="img-nav">

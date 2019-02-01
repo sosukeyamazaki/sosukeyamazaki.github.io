@@ -25,5 +25,45 @@
         "anime": "Free! -Dive to the future-",
         "year": 2018,
         "episode": 10
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0119.PNG",
+        "chara": ["rin"],
+        "tags": ["black short sleeve tracksuit"],
+        "season": 1,
+        "anime": "Free!",
+        "year": 2013,
+        "episode": 6
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0120.PNG",
+        "chara": ["rin"],
+        "tags": ["black short sleeve tracksuit"],
+        "season": 1,
+        "anime": "Free!",
+        "year": 2013,
+        "episode": 6
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1629.PNG",
+        "chara": ["rin"],
+        "tags": ["grey hoodie"],
+        "season": 2,
+        "episode": 2
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1630.PNG",
+        "chara": ["rin"],
+        "tags": ["watch"],
+        "season": 2,
+        "episode": 2
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1631.PNG",
+        "chara": ["rin"],
+        "tags": ["blue full zipper hoodie"],
+        "season": 2,
+        "episode": 2
     }
+
 ]
