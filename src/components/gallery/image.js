@@ -29,14 +29,16 @@ class Image extends Component{
       styleObj.zIndex = 11;
     }
     let figureClassName = 'img-figure';
+    figureClassName += this.props.isCenter ? ' is-center' : '';
     figureClassName += this.props.arrange.isReverse ? ' is-reverse' : '';
+
     let allTitles = [];
     for (let i = 0; i < this.props.data.tags.length; i++) {
       let classname = 'img-title';
       if (this.props.selectedTags.indexOf(this.props.data.tags[i]) >= 0) {
         classname += ' selected-tag';
       }
-      let t = <h3 key={i} className={classname} onClick={() => this.props.settag(this.props.data.tags[i])}>{this.props.data.tags[i]}</h3>;
+      let t = <h3 key={i} className={classname} onClick={() => {this.props.settag(this.props.data.tags[i]); this.props.center();}}>{this.props.data.tags[i]}</h3>;
       allTitles.push(t);
     }
     return(

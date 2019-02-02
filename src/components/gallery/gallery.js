@@ -65,7 +65,8 @@ class Gallery extends Component{
         */
       ],
       selectedTag:[],
-      expand: -1
+      expand: -1,
+      centerid: 0
     };
   }
   /**
@@ -75,7 +76,10 @@ class Gallery extends Component{
    */
   putFigureCenter(index){
     return function(){
-    this.reArrangFigure(index)
+    this.reArrangFigure(index);
+    this.setState({
+      centerid: index
+    });
     }.bind(this)
   }
   /**
@@ -116,7 +120,7 @@ class Gallery extends Component{
       isCenter: true
     }
     // 上部区域图片
-    let topArrNum = Math.floor(Math.random() * 2 ), // 上部图片数量 0~1
+    let topArrNum = Math.floor(Math.random() * 5 ), // 上部图片数量 0~1
         topIndex = Math.floor(Math.random()*(figureArrangeArr.length - topArrNum)), // 上部图片起始 index
         figureTopArr = figureArrangeArr.splice(topIndex, topArrNum)
 
@@ -128,7 +132,7 @@ class Gallery extends Component{
         },
         rotate: getRandomDeg,
         isReverse: false,
-        isCenter: false
+        isCenter: false,
       }
     })
     // 左右两边图片
@@ -146,7 +150,7 @@ class Gallery extends Component{
         },
         rotate: getRandomDeg(),
         isReverse: false,
-        isCenter: false
+        isCenter: false,
       }
     }
     if(figureTopArr && figureTopArr[0]){
@@ -174,7 +178,45 @@ class Gallery extends Component{
       selectedTag: selectedTag
     });
   }
+  _handleKeyDown(event){
+    event.stopImmediatePropagation();
+    let id;
+    switch(event.keyCode){
+      case 37:
+        if (this.state.centerid == 0) {
+          id = this.state.figureArrangeArr.length-1;
+        } else {
+          id = this.state.centerid-1;
+        }
+        while (this.state.figureArrangeArr[id].isPushed != true && id != this.state.centerid) {
+          id--;
+          if (id < 0) {
+            id = this.state.figureArrangeArr.length-1;
+          }
+        }
+        this.putFigureCenter(id).bind(this)();
+        return;
+      case 39:
+        if (this.state.centerid == this.state.figureArrangeArr.length-1) {
+          id = 0;
+        } else {
+          id = this.state.centerid+1;
+        }
+        while (this.state.figureArrangeArr[id].isPushed != true  && id != this.state.centerid) {
+          id++;
+          if (id >= this.state.figureArrangeArr.length) {
+            id = 0;
+          }
+        }
+        this.putFigureCenter(id).bind(this)();
+        return;
+    }
+  }
   componentDidMount(){
+    //document.addEventListener("click", this._handleDocumentClick, false);
+    document.addEventListener("keydown", this._handleKeyDown.bind(this));
+    let centerid = getRandom(0,ImgsData.length-1);
+    this.state.centerid = centerid;
       // 获取 stage 的宽高
       let stage = document.getElementById('stage'),
           stageWidth = stage.scrollWidth,
@@ -182,9 +224,9 @@ class Gallery extends Component{
           halfStageWidth = Math.ceil(stageWidth/2),
           halfStageHeight = Math.ceil(stageHeight/2)
       // 获取 figure 的宽高
-      let figure = document.getElementById('figure0'),
-          figureWidth = figure.scrollWidth,
-          figureHeight = figure.scrollHeight,
+      let figure = document.getElementById('figure'+centerid),
+          figureWidth = figure.scrollWidth*1.4,
+          figureHeight = figure.scrollHeight*1.4,
           halfFigureWidth = Math.ceil(figureWidth/2),
           halfFigureHeight = Math.ceil(figureHeight/2)
       this.constantPos = {
@@ -194,32 +236,22 @@ class Gallery extends Component{
           top: halfStageHeight - halfFigureHeight
         },
         horizontalRange:{
-           leftSectionX: [-halfFigureWidth,halfStageWidth - 3 * halfFigureWidth],
-           rightSectionX: [3 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
+           leftSectionX: [-halfFigureWidth,halfStageWidth - 1.5 * halfFigureWidth],
+           rightSectionX: [1.5 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
            y: [-halfFigureHeight, stageHeight - halfFigureHeight]
         },
         verticalRange: {
           x: [halfStageWidth - figureWidth, halfStageWidth],
-          topSectionY: [-halfFigureHeight, halfStageHeight - 3 * halfFigureHeight]
+          topSectionY: [-halfFigureHeight, halfStageHeight - 1.5 * halfFigureHeight]
       }
     }
-    this.reArrangFigure(0)
+    this.reArrangFigure(centerid)
   }
+
   render(){
     let navigators = []
     let imgFigures = []
     ImgsData.forEach(function(ImgsData,index){
-      if(!this.state.figureArrangeArr[index]){
-        this.state.figureArrangeArr[index] = {
-          pos: {
-            left: 0,
-            top: 0
-          },
-          rotate: 0,
-          isReverse: false,
-          isCenter: false
-        }
-      }
       let shouldPush = false;
       if (this.state.selectedTag.length > 0) {
         for (let i = 0; i < this.state.selectedTag.length; i++){
@@ -230,17 +262,30 @@ class Gallery extends Component{
       } else {
         shouldPush = true;
       }
+      if(!this.state.figureArrangeArr[index]){
+        this.state.figureArrangeArr[index] = {
+          pos: {
+            left: 0,
+            top: 0
+          },
+          rotate: 0,
+          isReverse: false,
+          isCenter: false,
+        }
+      }
+      this.state.figureArrangeArr[index].isPushed = shouldPush;
+
       if (shouldPush) {
-        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index} figid={index}
+        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index} figid={index} isCenter={this.state.figureArrangeArr[index].isCenter}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
-                        center={this.putFigureCenter(index)}
+                        center={this.putFigureCenter(index).bind(this)}
                         settag={this.setTag.bind(this)}
                         expand={this.expandFigure.bind(this)}/>)
         navigators.push(<Controller key={index}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
-                        center={this.putFigureCenter(index)}
+                        center={this.putFigureCenter(index).bind(this)}
 
                         />)
       }
@@ -257,7 +302,7 @@ class Gallery extends Component{
           <Popup
             text='Close Me'
             closePopup={() => this.expandFigure(-1).bind(this)} pic={ImgsData[this.state.expand]} close={this.expandFigure.bind(this)}/>
-          
+
           : null
         }
       </div>

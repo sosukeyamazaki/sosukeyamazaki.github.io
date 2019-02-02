@@ -61,9 +61,114 @@
     {
         "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1631.PNG",
         "chara": ["rin"],
-        "tags": ["blue full zipper hoodie"],
+        "tags": ["blue full zipper hoodie 1"],
         "season": 2,
         "episode": 2
-    }
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1632.PNG",
+        "chara": ["rin"],
+        "tags": ["blue full zipper hoodie 1"],
+        "season": 2,
+        "episode": 2
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1634.PNG",
+        "chara": ["rin"],
+        "tags": ["blue full zipper hoodie 2"],
+        "season": 2,
+        "episode": 3
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1636.PNG",
+        "chara": ["rin"],
+        "tags": ["blue full zipper hoodie 2"],
+        "season": 2,
+        "episode": 3
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1637.PNG",
+        "chara": ["rin"],
+        "tags": ["olive green vest"],
+        "season": 2,
+        "episode": 3
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1638.PNG",
+        "chara": ["rin"],
+        "tags": ["midnight blue vest"],
+        "season": 2,
+        "episode": 3
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1641.PNG",
+        "chara": ["rin"],
+        "tags": ["triangle logo shirt"],
+        "season": 2,
+        "episode": 4
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1642.PNG",
+        "chara": ["rin"],
+        "tags": ["black short sleeve tracksuit"],
+        "season": 2,
+        "episode": 4
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1643.PNG",
+        "chara": ["rin"],
+        "tags": ["black short sleeve tracksuit"],
+        "season": 2,
+        "episode": 4
+    },
 
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1649.PNG",
+        "chara": ["rin"],
+        "tags": ["black v-neck short sleeve"],
+        "season": 1,
+        "episode": 9
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1650.PNG",
+        "chara": ["rin"],
+        "tags": ["black v-neck short sleeve"],
+        "season": 1,
+        "episode": 9
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1652.PNG",
+        "chara": ["rin"],
+        "tags": ["blue vest"],
+        "season": 1,
+        "episode": 8
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1653.PNG",
+        "chara": ["rin"],
+        "tags": ["red vest"],
+        "season": 1,
+        "episode": 8
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1654.PNG",
+        "chara": ["rin"],
+        "tags": ["red vest"],
+        "season": 1,
+        "episode": 8
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1658.PNG",
+        "chara": ["rin"],
+        "tags": ["black full zipper jacket"],
+        "season": 1,
+        "episode": 10
+    },
+    {
+        "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1659.PNG",
+        "chara": ["rin"],
+        "tags": ["black full zipper jacket"],
+        "season": 1,
+        "episode": 10
+    }
 ]
