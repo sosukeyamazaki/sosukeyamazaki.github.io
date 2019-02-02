@@ -141,34 +141,34 @@
         "chara": ["rin"],
         "tags": ["blue vest"],
         "season": 1,
-        "episode": 8
+        "episode": 7
     },
     {
         "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1653.PNG",
         "chara": ["rin"],
         "tags": ["red vest"],
         "season": 1,
-        "episode": 8
+        "episode": 7
     },
     {
         "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1654.PNG",
         "chara": ["rin"],
         "tags": ["red vest"],
         "season": 1,
-        "episode": 8
+        "episode": 7
     },
     {
         "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1658.PNG",
         "chara": ["rin"],
         "tags": ["black full zipper jacket"],
         "season": 1,
-        "episode": 10
+        "episode": 11
     },
     {
         "url": "https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1659.PNG",
         "chara": ["rin"],
         "tags": ["black full zipper jacket"],
         "season": 1,
-        "episode": 10
+        "episode": 11
     }
 ]

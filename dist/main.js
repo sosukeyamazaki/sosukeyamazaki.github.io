@@ -22225,6 +22225,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/*
+var AWS = require ('aws-sdk');
+
+var s3 = new AWS.S3({region: 'ap-northeast-1'});
+function unauthenticatedRequest(operation, params, callback) {
+  var request = s3[operation](params);
+  request.removeListener('validate', AWS.EventListeners.Core.VALIDATE_CREDENTIALS);
+  request.removeListener('sign', AWS.EventListeners.Core.SIGN);
+  request.send(callback);
+}*/
 var getRandom = function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
@@ -22477,7 +22487,10 @@ var Gallery = function (_Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      //document.addEventListener("click", this._handleDocumentClick, false);
+      /*unauthenticatedRequest('listObjectsV2', {Bucket: 'sosukeyamazaki'}, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else     console.log(data);           // successful response
+      });*/
       document.addEventListener("keydown", this._handleKeyDown.bind(this));
       var centerid = getRandom(0, _imgsdata2.default.length - 1);
       this.state.centerid = centerid;

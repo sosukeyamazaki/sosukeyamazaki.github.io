@@ -4,6 +4,7 @@ import ImgsData from './imgsdata.json'
 import Image from './image'
 import Controller from './controller'
 import './gallery.less'
+/*
 var AWS = require ('aws-sdk');
 
 var s3 = new AWS.S3({region: 'ap-northeast-1'});
@@ -12,22 +13,7 @@ function unauthenticatedRequest(operation, params, callback) {
   request.removeListener('validate', AWS.EventListeners.Core.VALIDATE_CREDENTIALS);
   request.removeListener('sign', AWS.EventListeners.Core.SIGN);
   request.send(callback);
-}
-let listDirectories = () => {
-  return new Promise ((resolve, reject) => {
-    const s3params = {
-      Bucket: 'sosukeyamazaki',
-      MaxKeys: 20,
-      Delimiter: '/',
-    };
-    s3.listObjectsV2 (s3params, (err, data) => {
-      if (err) {
-        reject (err);
-      }
-      resolve (data);
-    });
-  });
-};
+}*/
 let getRandom = (min,max) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
@@ -236,10 +222,10 @@ class Gallery extends Component{
     }
   }
   componentDidMount(){
-    unauthenticatedRequest('listObjectsV2', {Bucket: 'sosukeyamazaki'}, function(err, data) {
+    /*unauthenticatedRequest('listObjectsV2', {Bucket: 'sosukeyamazaki'}, function(err, data) {
       if (err) console.log(err, err.stack); // an error occurred
       else     console.log(data);           // successful response
-    });
+    });*/
     document.addEventListener("keydown", this._handleKeyDown.bind(this));
     let centerid = getRandom(0,ImgsData.length-1);
     this.state.centerid = centerid;
