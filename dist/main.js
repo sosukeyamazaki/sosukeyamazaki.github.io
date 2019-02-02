@@ -22310,7 +22310,8 @@ var Gallery = function (_Component) {
         */
       ],
       selectedTag: [],
-      expand: -1
+      expand: -1,
+      centerid: 0
     };
     return _this3;
   }
@@ -22326,6 +22327,9 @@ var Gallery = function (_Component) {
     value: function putFigureCenter(index) {
       return function () {
         this.reArrangFigure(index);
+        this.setState({
+          centerid: index
+        });
       }.bind(this);
     }
     /**
@@ -22372,7 +22376,7 @@ var Gallery = function (_Component) {
         isReverse: false,
         isCenter: true
         // 上部区域图片
-      };var topArrNum = Math.floor(Math.random() * 2),
+      };var topArrNum = Math.floor(Math.random() * 5),
           // 上部图片数量 0~1
       topIndex = Math.floor(Math.random() * (figureArrangeArr.length - topArrNum)),
           // 上部图片起始 index
@@ -22435,8 +22439,48 @@ var Gallery = function (_Component) {
       });
     }
   }, {
+    key: '_handleKeyDown',
+    value: function _handleKeyDown(event) {
+      event.stopImmediatePropagation();
+      var id = void 0;
+      switch (event.keyCode) {
+        case 37:
+          if (this.state.centerid == 0) {
+            id = this.state.figureArrangeArr.length - 1;
+          } else {
+            id = this.state.centerid - 1;
+          }
+          while (this.state.figureArrangeArr[id].isPushed != true && id != this.state.centerid) {
+            id--;
+            if (id < 0) {
+              id = this.state.figureArrangeArr.length - 1;
+            }
+          }
+          this.putFigureCenter(id).bind(this)();
+          return;
+        case 39:
+          if (this.state.centerid == this.state.figureArrangeArr.length - 1) {
+            id = 0;
+          } else {
+            id = this.state.centerid + 1;
+          }
+          while (this.state.figureArrangeArr[id].isPushed != true && id != this.state.centerid) {
+            id++;
+            if (id >= this.state.figureArrangeArr.length) {
+              id = 0;
+            }
+          }
+          this.putFigureCenter(id).bind(this)();
+          return;
+      }
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      //document.addEventListener("click", this._handleDocumentClick, false);
+      document.addEventListener("keydown", this._handleKeyDown.bind(this));
+      var centerid = getRandom(0, _imgsdata2.default.length - 1);
+      this.state.centerid = centerid;
       // 获取 stage 的宽高
       var stage = document.getElementById('stage'),
           stageWidth = stage.scrollWidth,
@@ -22444,9 +22488,9 @@ var Gallery = function (_Component) {
           halfStageWidth = Math.ceil(stageWidth / 2),
           halfStageHeight = Math.ceil(stageHeight / 2);
       // 获取 figure 的宽高
-      var figure = document.getElementById('figure0'),
-          figureWidth = figure.scrollWidth,
-          figureHeight = figure.scrollHeight,
+      var figure = document.getElementById('figure' + centerid),
+          figureWidth = figure.scrollWidth * 1.4,
+          figureHeight = figure.scrollHeight * 1.4,
           halfFigureWidth = Math.ceil(figureWidth / 2),
           halfFigureHeight = Math.ceil(figureHeight / 2);
       this.constantPos = {
@@ -22456,16 +22500,16 @@ var Gallery = function (_Component) {
           top: halfStageHeight - halfFigureHeight
         },
         horizontalRange: {
-          leftSectionX: [-halfFigureWidth, halfStageWidth - 3 * halfFigureWidth],
-          rightSectionX: [3 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
+          leftSectionX: [-halfFigureWidth, halfStageWidth - 1.5 * halfFigureWidth],
+          rightSectionX: [1.5 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
           y: [-halfFigureHeight, stageHeight - halfFigureHeight]
         },
         verticalRange: {
           x: [halfStageWidth - figureWidth, halfStageWidth],
-          topSectionY: [-halfFigureHeight, halfStageHeight - 3 * halfFigureHeight]
+          topSectionY: [-halfFigureHeight, halfStageHeight - 1.5 * halfFigureHeight]
         }
       };
-      this.reArrangFigure(0);
+      this.reArrangFigure(centerid);
     }
   }, {
     key: 'render',
@@ -22475,6 +22519,16 @@ var Gallery = function (_Component) {
       var navigators = [];
       var imgFigures = [];
       _imgsdata2.default.forEach(function (ImgsData, index) {
+        var shouldPush = false;
+        if (this.state.selectedTag.length > 0) {
+          for (var i = 0; i < this.state.selectedTag.length; i++) {
+            if (ImgsData.tags.indexOf(this.state.selectedTag[i]) >= 0) {
+              shouldPush = true;
+            }
+          }
+        } else {
+          shouldPush = true;
+        }
         if (!this.state.figureArrangeArr[index]) {
           this.state.figureArrangeArr[index] = {
             pos: {
@@ -22486,27 +22540,19 @@ var Gallery = function (_Component) {
             isCenter: false
           };
         }
-        var shouldPush = false;
-        if (this.state.selectedTag.length > 0) {
-          for (var i = 0; i < this.state.selectedTag.length; i++) {
-            if (ImgsData.tags.indexOf(this.state.selectedTag[i]) >= 0) {
-              shouldPush = true;
-            }
-          }
-        } else {
-          shouldPush = true;
-        }
+        this.state.figureArrangeArr[index].isPushed = shouldPush;
+
         if (shouldPush) {
-          imgFigures.push(_react2.default.createElement(_image2.default, { data: ImgsData, selectedTags: this.state.selectedTag, key: index, id: "figure" + index, figid: index,
+          imgFigures.push(_react2.default.createElement(_image2.default, { data: ImgsData, selectedTags: this.state.selectedTag, key: index, id: "figure" + index, figid: index, isCenter: this.state.figureArrangeArr[index].isCenter,
             arrange: this.state.figureArrangeArr[index],
             reverse: this.reverseFigure(index),
-            center: this.putFigureCenter(index),
+            center: this.putFigureCenter(index).bind(this),
             settag: this.setTag.bind(this),
             expand: this.expandFigure.bind(this) }));
           navigators.push(_react2.default.createElement(_controller2.default, { key: index,
             arrange: this.state.figureArrangeArr[index],
             reverse: this.reverseFigure(index),
-            center: this.putFigureCenter(index)
+            center: this.putFigureCenter(index).bind(this)
 
           }));
         }
@@ -22542,7 +22588,7 @@ exports.default = Gallery;
 /* 185 */
 /***/ (function(module, exports) {
 
-module.exports = [{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1625.jpg","chara":["rin"],"tags":["black full zipper jacket"],"anime":"Free!","season":1,"year":2013,"episode":5},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1601.jpg","chara":["rin"],"tags":["black tracksuit"],"anime":"Free!","season":1,"year":2013,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/Free!_3rd_Season_EP10_endcard.jpg","chara":["rin","sosuke"],"tags":["black cap"],"season":3,"anime":"Free! -Dive to the future-","year":2018,"episode":10},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0119.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0120.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1629.PNG","chara":["rin"],"tags":["grey hoodie"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1630.PNG","chara":["rin"],"tags":["watch"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1631.PNG","chara":["rin"],"tags":["blue full zipper hoodie"],"season":2,"episode":2}]
+module.exports = [{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1625.jpg","chara":["rin"],"tags":["black full zipper jacket"],"anime":"Free!","season":1,"year":2013,"episode":5},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_1601.jpg","chara":["rin"],"tags":["black tracksuit"],"anime":"Free!","season":1,"year":2013,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/Free!_3rd_Season_EP10_endcard.jpg","chara":["rin","sosuke"],"tags":["black cap"],"season":3,"anime":"Free! -Dive to the future-","year":2018,"episode":10},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0119.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/rin/IMG_0120.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":1,"anime":"Free!","year":2013,"episode":6},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1629.PNG","chara":["rin"],"tags":["grey hoodie"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1630.PNG","chara":["rin"],"tags":["watch"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1631.PNG","chara":["rin"],"tags":["blue full zipper hoodie 1"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1632.PNG","chara":["rin"],"tags":["blue full zipper hoodie 1"],"season":2,"episode":2},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1634.PNG","chara":["rin"],"tags":["blue full zipper hoodie 2"],"season":2,"episode":3},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1636.PNG","chara":["rin"],"tags":["blue full zipper hoodie 2"],"season":2,"episode":3},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1637.PNG","chara":["rin"],"tags":["olive green vest"],"season":2,"episode":3},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1638.PNG","chara":["rin"],"tags":["midnight blue vest"],"season":2,"episode":3},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1641.PNG","chara":["rin"],"tags":["triangle logo shirt"],"season":2,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1642.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":2,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/1/IMG_1643.PNG","chara":["rin"],"tags":["black short sleeve tracksuit"],"season":2,"episode":4},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1649.PNG","chara":["rin"],"tags":["black v-neck short sleeve"],"season":1,"episode":9},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1650.PNG","chara":["rin"],"tags":["black v-neck short sleeve"],"season":1,"episode":9},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1652.PNG","chara":["rin"],"tags":["blue vest"],"season":1,"episode":8},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1653.PNG","chara":["rin"],"tags":["red vest"],"season":1,"episode":8},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1654.PNG","chara":["rin"],"tags":["red vest"],"season":1,"episode":8},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1658.PNG","chara":["rin"],"tags":["black full zipper jacket"],"season":1,"episode":10},{"url":"https://s3-ap-northeast-1.amazonaws.com/sosukeyamazaki/Archive/2019/2/IMG_1659.PNG","chara":["rin"],"tags":["black full zipper jacket"],"season":1,"episode":10}]
 
 /***/ }),
 /* 186 */
@@ -22610,7 +22656,9 @@ var Image = function (_Component) {
         styleObj.zIndex = 11;
       }
       var figureClassName = 'img-figure';
+      figureClassName += this.props.isCenter ? ' is-center' : '';
       figureClassName += this.props.arrange.isReverse ? ' is-reverse' : '';
+
       var allTitles = [];
 
       var _loop = function _loop(i) {
@@ -22621,7 +22669,7 @@ var Image = function (_Component) {
         var t = _react2.default.createElement(
           'h3',
           { key: i, className: classname, onClick: function onClick() {
-              return _this2.props.settag(_this2.props.data.tags[i]);
+              _this2.props.settag(_this2.props.data.tags[i]);_this2.props.center();
             } },
           _this2.props.data.tags[i]
         );
@@ -22769,7 +22817,7 @@ exports = module.exports = __webpack_require__(191)(false);
 
 
 // module
-exports.push([module.i, "html {\n  height: 100%;\n}\nbody {\n  margin: 0;\n  padding: 0;\n  background: #333;\n  width: 100%;\n  height: 100%;\n}\nh3 {\n  margin: 0;\n  padding: 0;\n}\n#root {\n  height: 100%;\n}\n.stage {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: #ccc;\n}\n.popup {\n  top: 30%;\n  left: 30%;\n  position: fixed;\n  max-width: 500px;\n  height: auto;\n  z-index: 15;\n}\n.popup img {\n  width: 100%;\n}\n.popup .close {\n  float: right;\n  margin-bottom: 5px;\n  width: 20px;\n}\n.img-container {\n  font: 400 12px \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, Osaka, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\", sans-serif;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: url(" + escape(__webpack_require__(192)) + ") repeat-y top center scroll;\n  overflow: hidden;\n}\n.img-figure {\n  position: absolute;\n  width: 280px;\n  height: auto;\n  margin: 0;\n  padding: 20px;\n  border-radius: 3px;\n  box-sizing: border-box;\n  perspective: 1800px;\n  box-shadow: 5px 5px 16px -1px rgba(0, 0, 0, 0.19);\n  background: #fff;\n  overflow: visible;\n  display: table;\n  transform-style: preserve-3d;\n  transform-origin: 0 50% 0;\n}\n.img-figure .pic {\n  width: 100%;\n  height: auto;\n  cursor: pointer;\n  overflow: auto;\n  display: table-row;\n}\n.img-figure .pic .target {\n  width: 500px;\n  height: auto;\n}\n.img-figure .expand {\n  top: 2px;\n  right: 2px;\n  position: absolute;\n  display: block;\n  cursor: pointer;\n}\n.img-figure figcaption {\n  text-align: center;\n}\n.img-figure .img-title {\n  cursor: pointer;\n  color: #603501;\n  display: table-row;\n}\n.img-figure .selected-tag {\n  cursor: pointer;\n  background: #600101;\n  font-weight: bold;\n  color: #fff;\n}\n/*\n.img-figure::before, .img-figure::after {\n  content:\"\";\n  display:table-row;\n}\n.img-figure::after {\n  content: \".\";\n  display: table-row;\n  height: 0;\n  clear: both;\n  overflow: auto;\n  visibility: hidden;\n}*/\n.img-figure.is-reverse {\n  background-image: url(" + escape(__webpack_require__(193)) + ");\n  background-color: #fff;\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: center;\n  transform: translate(320px) rotateY(180deg);\n}\n/*\n.front, .back {\n  backface-visibility: hidden;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 20px;\n}\n*/\n.img-figure .front {\n  backface-visibility: hidden;\n  display: table-row;\n  text-align: center;\n  z-index: 2;\n  transform: rotateY(0deg);\n}\n.img-figure .back {\n  cursor: pointer;\n  top: 30%;\n  left: 30%;\n  text-align: right;\n  float: left;\n  display: block;\n  position: absolute;\n  transform: rotateY(180deg);\n}\n.img-figure .back .desc {\n  color: #e64646;\n  font-weight: bold;\n}\n.img-nav {\n  position: absolute;\n  left: 0;\n  bottom: 30px;\n  text-align: center;\n  z-index: 100;\n  width: 100%;\n}\n.img-nav .controller {\n  display: inline-block;\n  width: 100px;\n  height: 100px;\n  background-image: url(" + escape(__webpack_require__(194)) + ");\n  border-radius: 50%;\n  transform: scale(0.3);\n  transition: transform 0.6s ease-in-out, background-color 0.3s;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.img-nav .controller.is-center {\n  transform: scale(0.4);\n}\n.img-nav .controller.is-center.is-reverse {\n  background-color: #555;\n  transform: rotateY(180deg) scale(0.4);\n}\n", ""]);
+exports.push([module.i, "html {\n  height: 100%;\n}\nbody {\n  margin: 0;\n  padding: 0;\n  background: #333;\n  width: 100%;\n  height: 100%;\n}\nh3 {\n  margin: 0;\n  padding: 0;\n}\n#root {\n  height: 100%;\n}\n.stage {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: #ccc;\n}\n.popup {\n  top: 20%;\n  bottom: 20%;\n  left: 20%;\n  right: 20%;\n  position: fixed;\n  max-width: 800px;\n  height: auto;\n  z-index: 15;\n}\n.popup img {\n  width: 100%;\n}\n.popup .close {\n  float: right;\n  margin-bottom: 5px;\n  width: 20px;\n}\n.img-container {\n  font: 400 12px \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, Osaka, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\", sans-serif;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background: url(" + escape(__webpack_require__(192)) + ") repeat-y top center scroll;\n  overflow: hidden;\n}\n.img-figure {\n  position: absolute;\n  width: 280px;\n  height: auto;\n  margin: 0;\n  padding: 20px;\n  border-radius: 3px;\n  box-sizing: border-box;\n  perspective: 1800px;\n  box-shadow: 5px 5px 16px -1px rgba(0, 0, 0, 0.19);\n  background: #fff;\n  overflow: visible;\n  display: table;\n  transform-style: preserve-3d;\n  transform-origin: 0 50% 0;\n}\n.img-figure.is-center {\n  transform: scale(1.4);\n}\n.img-figure.is-reverse {\n  background-image: url(" + escape(__webpack_require__(193)) + ");\n  background-color: #fff;\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: center;\n  transform: scale(1.4) translate(320px) rotateY(180deg);\n}\n.img-figure .pic {\n  width: 100%;\n  height: auto;\n  cursor: pointer;\n  overflow: auto;\n  display: table-row;\n}\n.img-figure .pic .target {\n  width: 800px;\n  height: auto;\n}\n.img-figure .expand {\n  top: 2px;\n  right: 2px;\n  position: absolute;\n  display: block;\n  cursor: pointer;\n}\n.img-figure figcaption {\n  text-align: center;\n}\n.img-figure .img-title {\n  cursor: pointer;\n  color: #603501;\n  display: table-row;\n}\n.img-figure .selected-tag {\n  cursor: pointer;\n  background: #600101;\n  font-weight: bold;\n  color: #fff;\n}\n/*\n.img-figure::before, .img-figure::after {\n  content:\"\";\n  display:table-row;\n}\n.img-figure::after {\n  content: \".\";\n  display: table-row;\n  height: 0;\n  clear: both;\n  overflow: auto;\n  visibility: hidden;\n}*/\n/*\n.front, .back {\n  backface-visibility: hidden;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 20px;\n}\n*/\n.img-figure .front {\n  backface-visibility: hidden;\n  display: table-row;\n  text-align: center;\n  z-index: 2;\n  transform: rotateY(0deg);\n}\n.img-figure .back {\n  cursor: pointer;\n  top: 30%;\n  left: 30%;\n  text-align: right;\n  float: left;\n  display: block;\n  position: absolute;\n  transform: rotateY(180deg);\n}\n.img-figure .back .desc {\n  color: #e64646;\n  font-weight: bold;\n}\n.img-nav {\n  position: absolute;\n  left: 0;\n  bottom: 30px;\n  text-align: center;\n  z-index: 100;\n  width: 100%;\n}\n.img-nav .controller {\n  display: inline-block;\n  width: 50px;\n  height: 50px;\n  background-image: url(" + escape(__webpack_require__(194)) + ");\n  background-size: cover;\n  border-radius: 50%;\n  transform: scale(0.3);\n  transition: transform 0.6s ease-in-out, background-color 0.3s;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.img-nav .controller.is-center {\n  transform: scale(0.4);\n}\n.img-nav .controller.is-center.is-reverse {\n  background-color: #555;\n  transform: rotateY(180deg) scale(0.4);\n}\n", ""]);
 
 // exports
 
