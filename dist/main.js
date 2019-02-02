@@ -22250,7 +22250,7 @@ var Popup = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'popup' },
-        _react2.default.createElement('img', { className: 'close', src: '../../imgs/Close-icon.png', onClick: function onClick() {
+        _react2.default.createElement('img', { className: 'close', src: 'http://icons.iconarchive.com/icons/iconsmind/outline/32/Close-icon.png', onClick: function onClick() {
             return _this2.props.close(-1);
           } }),
         _react2.default.createElement('img', { src: this.props.pic.url })
