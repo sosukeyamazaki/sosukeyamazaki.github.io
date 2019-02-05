@@ -1,10 +1,11 @@
 import React,{Component} from 'react'
 import ReactDom from 'react-dom'
-import ImgsData from './imgsdata.json'
+//import ImgsData from './imgsdata.json'
 import Image from './image'
 import Controller from './controller'
 import './gallery.less'
-/*
+import prefix from './const'
+import 'babel-polyfill';
 var AWS = require ('aws-sdk');
 
 var s3 = new AWS.S3({region: 'ap-northeast-1'});
@@ -13,7 +14,11 @@ function unauthenticatedRequest(operation, params, callback) {
   request.removeListener('validate', AWS.EventListeners.Core.VALIDATE_CREDENTIALS);
   request.removeListener('sign', AWS.EventListeners.Core.SIGN);
   request.send(callback);
-}*/
+}
+
+
+
+
 let getRandom = (min,max) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
@@ -26,7 +31,7 @@ class Popup extends React.Component {
     return (
       <div className='popup'>
         <img className='close' src='http://icons.iconarchive.com/icons/iconsmind/outline/32/Close-icon.png' onClick={() => this.props.close(-1)}/>
-        <img src={this.props.pic.url} />
+        <img src={prefix+this.props.pic.key} />
       </div>
     );
   }
@@ -59,6 +64,7 @@ class Gallery extends Component{
       }
     };
     this.state = {
+      ImgsData: [],
       //  存储每个 figure 的位置
       figureArrangeArr:[
         /*
@@ -221,49 +227,107 @@ class Gallery extends Component{
         return;
     }
   }
-  componentDidMount(){
-    /*unauthenticatedRequest('listObjectsV2', {Bucket: 'sosukeyamazaki'}, function(err, data) {
+  /*getImgsData(filename) {
+    let callback = function(err, data) {
       if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });*/
-    document.addEventListener("keydown", this._handleKeyDown.bind(this));
-    let centerid = getRandom(0,ImgsData.length-1);
-    this.state.centerid = centerid;
+      else {
+        this.setState({ImgsData:JSON.parse(data.Body.toString())});          // successful response
+      }
+    }
+    
+    unauthenticatedRequest('getObject', {Bucket: 'sosukeyamazaki', Key: filename}, callback.bind(this));
+    //return ImgsData;
+  }*/
+  initSetting(){
+    let centerid = getRandom(0,this.state.ImgsData.length-1);
+    this.setState({centerid:centerid});
       // 获取 stage 的宽高
-      let stage = document.getElementById('stage'),
+    let stage = document.getElementById('stage'),
           stageWidth = stage.scrollWidth,
           stageHeight = stage.scrollHeight,
           halfStageWidth = Math.ceil(stageWidth/2),
           halfStageHeight = Math.ceil(stageHeight/2)
       // 获取 figure 的宽高
-      let figure = document.getElementById('figure'+centerid),
+    let figure = document.getElementById('figure'+centerid),
           figureWidth = figure.scrollWidth*1.4,
           figureHeight = figure.scrollHeight*1.4,
           halfFigureWidth = Math.ceil(figureWidth/2),
           halfFigureHeight = Math.ceil(figureHeight/2)
-      this.constantPos = {
+    this.constantPos = {
         // 中心 figure 位置
-        centerPos:{
-          left: halfStageWidth - halfFigureWidth,
-          top: halfStageHeight - halfFigureHeight
-        },
-        horizontalRange:{
-           leftSectionX: [-halfFigureWidth,halfStageWidth - 1.5 * halfFigureWidth],
-           rightSectionX: [1.5 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
-           y: [-halfFigureHeight, stageHeight - halfFigureHeight]
-        },
-        verticalRange: {
-          x: [halfStageWidth - figureWidth, halfStageWidth],
-          topSectionY: [-halfFigureHeight, halfStageHeight - 1.5 * halfFigureHeight]
+      centerPos:{
+        left: halfStageWidth - halfFigureWidth,
+        top: halfStageHeight - halfFigureHeight
+      },
+      horizontalRange:{
+        leftSectionX: [-halfFigureWidth,halfStageWidth - 1.5 * halfFigureWidth],
+        rightSectionX: [1.5 * halfFigureWidth + halfStageWidth, stageWidth - halfFigureWidth],
+        y: [-halfFigureHeight, stageHeight - halfFigureHeight]
+      },
+      verticalRange: {
+        x: [halfStageWidth - figureWidth, halfStageWidth],
+        topSectionY: [-halfFigureHeight, halfStageHeight - 1.5 * halfFigureHeight]
       }
     }
-    this.reArrangFigure(centerid)
+    
+  }
+  async getImgsData(filename) {
+    if (filename) {
+      fetch(prefix+filename) // 返回一个Promise对象
+        .then((res)=>{
+          //接口调用正常，将调用Promise.resolve()
+          return res.json() // res.text()是一个Promise对象 
+        })
+        .then((res)=>{
+          this.setState({ ImgsData: res });
+          this.initSetting();
+          this.reArrangFigure(this.state.centerid);
+          //接口调用正常，将调用Promise.reject()
+          //console.log(res) // res是最终的结果
+      }).catch((err)=>{
+        //接口调用正常，将调用Promise.reject()
+        console.log(err) // res是最终的结果
+      })
+      if (this.state.ImgsData.length <= 0){
+        return;
+      }
+      
+    }
+  }
+  componentWillMount() {
+    /*try {
+      const response = await fetch(prefix+'rin_bday_2019.json');
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      const json = await response.json();
+      this.setState({ ImgsData: json });
+    } catch (error) {
+      console.log(error);
+    }*/
+    this.getImgsData('rin_bday_2019.json');
+    
+    
+  }
+  componentWillUpdate() {
+    
+  }
+  componentDidMount(){
+    
+   
+    document.addEventListener("keydown", this._handleKeyDown.bind(this));
+    
+    
+    // fetch(prefix+'rin_bday_2019.json')
+    //   .then(res => res.json())
+    //   .then(json => this.setState({ ImgsData: json }));
+    
   }
 
   render(){
     let navigators = []
     let imgFigures = []
-    ImgsData.forEach(function(ImgsData,index){
+    this.state.ImgsData.forEach(function(ImgsData,index){
       let shouldPush = false;
       if (this.state.selectedTag.length > 0) {
         for (let i = 0; i < this.state.selectedTag.length; i++){
@@ -288,7 +352,7 @@ class Gallery extends Component{
       this.state.figureArrangeArr[index].isPushed = shouldPush;
 
       if (shouldPush) {
-        imgFigures.push(<Image data={ImgsData} selectedTags={this.state.selectedTag} key={index} id={"figure"+index} figid={index} isCenter={this.state.figureArrangeArr[index].isCenter}
+        imgFigures.push(<Image data={this.state.ImgsData[index]} selectedTags={this.state.selectedTag} key={index} id={"figure"+index} figid={index} isCenter={this.state.figureArrangeArr[index].isCenter}
                         arrange={this.state.figureArrangeArr[index]}
                         reverse={this.reverseFigure(index)}
                         center={this.putFigureCenter(index).bind(this)}
@@ -313,7 +377,7 @@ class Gallery extends Component{
         {this.state.expand !== -1 ?
           <Popup
             text='Close Me'
-            closePopup={() => this.expandFigure(-1).bind(this)} pic={ImgsData[this.state.expand]} close={this.expandFigure.bind(this)}/>
+            closePopup={() => this.expandFigure(-1).bind(this)} pic={this.state.ImgsData[this.state.expand]} close={this.expandFigure.bind(this)}/>
 
           : null
         }
